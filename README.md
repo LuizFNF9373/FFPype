@@ -6,7 +6,7 @@ Automação de transcodificação de vídeos usando Python e FFmpeg
 
 ## Sobre
 
-FFPY é uma ferramenta de linha de comando para automatizar a análise
+FFPype é uma ferramenta de linha de comando para automatizar a análise
 e conversão de vídeos.
 
 O projeto utiliza o FFprobe para extrair metadados dos vídeos,
@@ -18,9 +18,15 @@ combinações de FPS, resolução e bitrate.
 
 ---
 
+## Licença
+
+Este projeto é distribuído sob a licença MIT.
+
+---
+
 ## Origem
 
-O FFPY nasceu durante testes de encode de vídeos em um ambiente
+O FFPype nasceu durante testes de encode de vídeos em um ambiente
 Android utilizando o FFmpeg no Termux.
 
 O objetivo inicial era automatizar um processo que envolvia diversas
@@ -36,7 +42,7 @@ O projeto saiu de um conjunto de comandos experimentais para uma ferramenta
 em Python capaz de analisar metadados via FFprobe e gerar comandos
 dinâmicos para o FFmpeg.
 
-O motivo do decode do codec de entrada ser realizado via software
+O motivo pelo qual o decode do codec de entrada é realizado via software
 está relacionado à ausência de zero-copy (mecanismo que evita cópias
 desnecessárias entre componentes). No ambiente de testes, o caminho
 utilizando decode e encode via hardware apresentou desempenho inferior
@@ -64,15 +70,85 @@ A versão atual já suporta:
 
 ---
 
-## Exemplo de uso
+## Requisitos
 
-Coloque os vídeos de entrada no diretório "./videos/" e execute:
+- Python 3.10+
+- FFmpeg disponível no PATH do sistema
+- FFprobe disponível no PATH do sistema
+
+---
+
+## Instalação
+
+Clone o repositório:
 
 ```bash
-python ffpy.py
+git clone https://github.com/LuizFNF9373/FFPype.git
+cd FFPype
 ```
 
-O FFPY irá:
+Certifique-se de que o FFmpeg e o FFprobe estejam disponíveis no sistema:
+
+```bash
+ffmpeg -version
+ffprobe -version
+```
+
+---
+
+## Estrutura de diretórios
+
+Os diretórios abaixo são criados automaticamente pelo FFPype na primeira execução, caso ainda não existam.
+
+```text
+FFPype/
+├── videos/             # Vídeos de entrada
+├── final-v/            # Vídeos convertidos
+├── es/                 # Arquivos intermediários
+│   ├── ffprobe-json/   # Diretório dos metadados em JSON
+│   └── raw-stream/     # Diretório dos Streams brutos
+├── ffpype.py           # Programa principal
+└── README.md           # Readme
+```
+
+---
+
+## Como funciona
+
+Fluxo básico:
+
+```text
+Vídeo
+  │
+  ▼
+FFprobe
+  │
+  ▼
+Metadados (JSON)
+  │
+  ▼
+Python
+  │
+  ▼
+FFmpeg
+  │
+  ▼
+Vídeo convertido
+```
+
+---
+
+## Exemplo de uso
+
+```bash
+python ffpype.py
+```
+
+Na primeira execução, o FFPype cria automaticamente os diretórios necessários,
+caso ainda não existam. Em seguida, coloque os vídeos de entrada em
+"./videos/" e execute o programa novamente para iniciar a conversão.
+
+O FFPype irá:
 
 - Verificar se existem vídeos;
 - Executar o FFprobe;
@@ -108,38 +184,6 @@ timestamps ou utilizar uma etapa intermediária de muxing.**
 
 ---
 
-## Como funciona
-
-Fluxo básico:
-
-         Vídeo
-           |
-           v
-        FFprobe
-           |
-           v
-    JSON com metadados
-           |
-           v
- Python interpreta informações
-           |
-           v
-  FFmpeg recebe parâmetros
-          |
-          v
-    Vídeo convertido
-
-
----
-
-## Requisitos
-
-- Python 3.10+
-- FFmpeg
-- FFprobe
-
----
-
 ## Compatibilidade testada
 
 Projeto testado com:
@@ -147,17 +191,19 @@ Projeto testado com:
 - Vídeos H.264
 - Resoluções Full HD
 - Diferentes taxas de FPS
-- Arquivos provenientes de câmeras digitais
+- Arquivos de câmeras digitais
 
 ---
 
-## Fontes das amostras
+## Fontes das amostras do teste
 
 Foram utilizados vídeos provenientes de:
 
 - Câmeras Sony
 - Câmeras Panasonic
 - Smartphones Android
+
+---
 
 ## Próximos passos e melhorias
 
